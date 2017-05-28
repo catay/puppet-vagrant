@@ -40,6 +40,16 @@ Vagrant.configure(2) do |config|
     # Provision server.
     puppet01.vm.provision "shell", inline: $puppetserver_install
 
+    puppet01.vm.provision "puppet" do |puppet|
+      puppet.binary_path = "/opt/puppetlabs/bin"
+      #puppet.manifests_path = "puppet/manifests"
+      #puppet.manifest_file = "bootstrap_puppetserver.pp"
+      puppet.environment = "all" 
+      puppet.environment_path = 'puppet/bootstrap'
+      puppet.synced_folder_type = "rsync"
+      puppet.options = "--verbose --debug"
+    end
+
   end
 
 end
