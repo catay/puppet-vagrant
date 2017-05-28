@@ -11,7 +11,7 @@ $puppetserver_install = <<SCRIPT
 yum -y localinstall https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
 yum -y install puppetserver
 # downsize the JVM memory requirements for the puppet server
-sed -i -e 's/2g/256m/g' -e 's/256m/64m/g' /etc/sysconfig/puppetserver
+sed -i -e 's/2g/512m/g' -e 's/256m/64m/g' /etc/sysconfig/puppetserver
 SCRIPT
 
 ## Vagrant definitions ##
@@ -30,7 +30,7 @@ Vagrant.configure(2) do |config|
 
     # Set the memory of the server.
     puppet01.vm.provider "virtualbox" do |vb| 
-      vb.memory = "512"
+      vb.memory = "1024"
     end
 
     # Create a private network, which allows host-only access to the machine
