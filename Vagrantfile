@@ -52,4 +52,38 @@ Vagrant.configure(2) do |config|
 
   end
 
+  # Define server puppet02.
+
+  config.vm.define "puppet02" do |puppet02|
+
+    # Set the Vagrant box.
+    puppet02.vm.box = "centos/7"
+
+    # Set the hostname of the server.
+    puppet02.vm.hostname = "puppet02.example.net"
+
+    # Set the memory of the server.
+    puppet02.vm.provider "virtualbox" do |vb| 
+      vb.memory = "1024"
+    end
+
+    # Create a private network, which allows host-only access to the machine
+    # using a specific IP.
+    puppet02.vm.network "private_network", ip: "192.168.99.11"
+
+    # Provision server.
+    puppet02.vm.provision "shell", inline: $puppetserver_install
+
+    puppet02.vm.provision "puppet" do |puppet|
+      puppet.binary_path = "/opt/puppetlabs/bin"
+      #puppet.manifests_path = "puppet/manifests"
+      #puppet.manifest_file = "bootstrap_puppetserver.pp"
+      puppet.environment = "all" 
+      puppet.environment_path = 'puppet/bootstrap'
+      puppet.synced_folder_type = "rsync"
+      puppet.options = "--verbose --debug"
+    end
+
+  end
+
 end
