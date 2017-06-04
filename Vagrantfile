@@ -47,10 +47,8 @@ Vagrant.configure(2) do |config|
 
     puppet01.vm.provision "puppet" do |puppet|
       puppet.binary_path = "/opt/puppetlabs/bin"
-      #puppet.manifests_path = "puppet/manifests"
-      #puppet.manifest_file = "bootstrap_puppetserver.pp"
-      puppet.environment = "all" 
-      puppet.environment_path = 'puppet/bootstrap'
+      puppet.environment = "server" 
+      puppet.environment_path = 'bootstrap'
       puppet.synced_folder_type = "rsync"
       puppet.options = "--verbose --debug"
     end
@@ -81,10 +79,8 @@ Vagrant.configure(2) do |config|
 
     puppet02.vm.provision "puppet" do |puppet|
       puppet.binary_path = "/opt/puppetlabs/bin"
-      #puppet.manifests_path = "puppet/manifests"
-      #puppet.manifest_file = "bootstrap_puppetserver.pp"
-      puppet.environment = "all" 
-      puppet.environment_path = 'puppet/bootstrap'
+      puppet.environment = "server" 
+      puppet.environment_path = 'bootstrap'
       puppet.synced_folder_type = "rsync"
       puppet.options = "--verbose --debug"
     end
@@ -115,8 +111,6 @@ Vagrant.configure(2) do |config|
 
     node01.vm.provision "puppet" do |puppet|
       puppet.binary_path = "/opt/puppetlabs/bin"
-      #puppet.manifests_path = "puppet/manifests"
-      #puppet.manifest_file = "bootstrap_puppetserver.pp"
       puppet.environment = "agent" 
       puppet.environment_path = 'bootstrap'
       puppet.synced_folder_type = "rsync"
