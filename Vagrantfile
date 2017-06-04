@@ -14,6 +14,11 @@ yum -y install puppetserver
 sed -i -e 's/2g/512m/g' -e 's/256m/64m/g' /etc/sysconfig/puppetserver
 SCRIPT
 
+$puppetagent_install = <<SCRIPT
+yum -y localinstall https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+yum -y install puppet-agent
+SCRIPT
+
 ## Vagrant definitions ##
 
 Vagrant.configure(2) do |config|
@@ -80,6 +85,40 @@ Vagrant.configure(2) do |config|
       #puppet.manifest_file = "bootstrap_puppetserver.pp"
       puppet.environment = "all" 
       puppet.environment_path = 'puppet/bootstrap'
+      puppet.synced_folder_type = "rsync"
+      puppet.options = "--verbose --debug"
+    end
+
+  end
+
+  # Define server node01.
+
+  config.vm.define "node01" do |node01|
+
+    # Set the Vagrant box.
+    node01.vm.box = "centos/7"
+
+    # Set the hostname of the server.
+    node01.vm.hostname = "node01.example.net"
+
+    # Set the memory of the server.
+    node01.vm.provider "virtualbox" do |vb| 
+      vb.memory = "512"
+    end
+
+    # Create a private network, which allows host-only access to the machine
+    # using a specific IP.
+    node01.vm.network "private_network", ip: "192.168.99.20"
+
+    # Provision server.
+    node01.vm.provision "shell", inline: $puppetagent_install
+
+    node01.vm.provision "puppet" do |puppet|
+      puppet.binary_path = "/opt/puppetlabs/bin"
+      #puppet.manifests_path = "puppet/manifests"
+      #puppet.manifest_file = "bootstrap_puppetserver.pp"
+      puppet.environment = "agent" 
+      puppet.environment_path = 'bootstrap'
       puppet.synced_folder_type = "rsync"
       puppet.options = "--verbose --debug"
     end
