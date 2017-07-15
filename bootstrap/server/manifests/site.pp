@@ -8,6 +8,12 @@ host {"localhost":
   ip            => '127.0.0.1'
 }
 
+host {"localhost6": 
+  ensure        => present,
+  host_aliases  => ["localhost.localdomain", "localhost", "localhost6.localdomain6" ],
+  ip            => '::1'
+}
+
 host {$facts['networking']['fqdn']: 
   ensure        => present,
   host_aliases  => ["${facts['networking']['hostname']}", "puppet" ],
