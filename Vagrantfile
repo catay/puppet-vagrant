@@ -12,8 +12,6 @@ MAX_PUPPET_NODES=1
 $puppetserver_install = <<SCRIPT
 yum -y localinstall https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
 yum -y install puppetserver
-# downsize the JVM memory requirements for the puppet server
-sed -i -e 's/2g/512m/g' -e 's/256m/64m/g' /etc/sysconfig/puppetserver
 SCRIPT
 
 $puppetagent_install = <<SCRIPT

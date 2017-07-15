@@ -8,3 +8,11 @@ host {$facts['networking']['fqdn']:
   ip            => $facts['networking']['interfaces']['eth1']['ip']
 }
 
+# Downsize the JVM memory requirements for the puppet server.
+
+augeas {"puppetserver":
+        context => "/files/etc/sysconfig/puppetserver",
+        changes => [
+                "set JAVA_ARGS '\"-Xms512m -Xmx512m -XX:MaxPermSize=64m\"'"
+        ]
+}
