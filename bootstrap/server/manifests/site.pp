@@ -4,7 +4,7 @@
 
 host {$facts['networking']['fqdn']: 
   ensure        => present,
-  host_aliases  => ["${facts['networking']['hostname']}", "puppet" ]
+  host_aliases  => ["${facts['networking']['hostname']}", "puppet" ],
   ip            => $facts['networking']['interfaces']['eth1']['ip']
 }
 
