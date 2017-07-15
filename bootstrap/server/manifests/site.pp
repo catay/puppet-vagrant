@@ -1,6 +1,12 @@
 
-# Set FQDN and short host name in hosts file.
+# Set loopback, FQDN and short host name in hosts file.
 # For a Puppet Server we also set 'puppet' as a host alias.
+
+host {"localhost": 
+  ensure        => present,
+  host_aliases  => ["localhost.localdomain", "localhost4", "localhost4.localdomain4" ],
+  ip            => '127.0.0.1'
+}
 
 host {$facts['networking']['fqdn']: 
   ensure        => present,
