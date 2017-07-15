@@ -4,6 +4,8 @@
 ## Globals ##
 
 SUBNET_PRIVATE_NETWORK="192.168.99"
+MAX_PUPPET_SERVERS=2
+MAX_PUPPET_NODES=1
 
 ## Inline Shell scripts ##
 
@@ -23,66 +25,38 @@ SCRIPT
 
 Vagrant.configure(2) do |config|
 
-  # Define server puppet01.
+  # Define Puppet servers
+ 
+  (1..MAX_PUPPET_SERVERS).each do |i|
 
-  config.vm.define "puppet01" do |puppet01|
+    config.vm.define "puppet%02d" % [i] do |puppet_server|
 
-    # Set the Vagrant box.
-    puppet01.vm.box = "centos/7"
+      # Set the Vagrant box.
+      puppet_server.vm.box = "centos/7"
+  
+      # Set the hostname of the server.
+      puppet_server.vm.hostname = "puppet%02d.example.net" % i
+  
+      # Set the memory of the server.
+      puppet_server.vm.provider "virtualbox" do |vb| 
+        vb.memory = "1024"
+      end
+  
+      # Create a private network, which allows host-only access to the machine
+      # using a specific IP.
+      puppet_server.vm.network "private_network", ip: "192.168.99.1#{i}"
+  
+      # Provision server.
+      puppet_server.vm.provision "shell", inline: $puppetserver_install
+  
+      puppet_server.vm.provision "puppet" do |puppet|
+        puppet.binary_path = "/opt/puppetlabs/bin"
+        puppet.environment = "server" 
+        puppet.environment_path = 'bootstrap'
+        puppet.synced_folder_type = "rsync"
+        puppet.options = "--verbose --debug"
+      end
 
-    # Set the hostname of the server.
-    puppet01.vm.hostname = "puppet01.example.net"
-
-    # Set the memory of the server.
-    puppet01.vm.provider "virtualbox" do |vb| 
-      vb.memory = "1024"
-    end
-
-    # Create a private network, which allows host-only access to the machine
-    # using a specific IP.
-    puppet01.vm.network "private_network", ip: "192.168.99.10"
-
-    # Provision server.
-    puppet01.vm.provision "shell", inline: $puppetserver_install
-
-    puppet01.vm.provision "puppet" do |puppet|
-      puppet.binary_path = "/opt/puppetlabs/bin"
-      puppet.environment = "server" 
-      puppet.environment_path = 'bootstrap'
-      puppet.synced_folder_type = "rsync"
-      puppet.options = "--verbose --debug"
-    end
-
-  end
-
-  # Define server puppet02.
-
-  config.vm.define "puppet02" do |puppet02|
-
-    # Set the Vagrant box.
-    puppet02.vm.box = "centos/7"
-
-    # Set the hostname of the server.
-    puppet02.vm.hostname = "puppet02.example.net"
-
-    # Set the memory of the server.
-    puppet02.vm.provider "virtualbox" do |vb| 
-      vb.memory = "1024"
-    end
-
-    # Create a private network, which allows host-only access to the machine
-    # using a specific IP.
-    puppet02.vm.network "private_network", ip: "192.168.99.11"
-
-    # Provision server.
-    puppet02.vm.provision "shell", inline: $puppetserver_install
-
-    puppet02.vm.provision "puppet" do |puppet|
-      puppet.binary_path = "/opt/puppetlabs/bin"
-      puppet.environment = "server" 
-      puppet.environment_path = 'bootstrap'
-      puppet.synced_folder_type = "rsync"
-      puppet.options = "--verbose --debug"
     end
 
   end
