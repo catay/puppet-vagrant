@@ -91,34 +91,38 @@ Vagrant.configure(2) do |config|
 
   end
 
-  # Define server node01.
+  # Define Puppet node servers
 
-  config.vm.define "node01" do |node01|
+  (1..MAX_PUPPET_NODES).each do |i|
 
-    # Set the Vagrant box.
-    node01.vm.box = "centos/7"
+    config.vm.define "n%02d" % [i] do |puppet_node|
 
-    # Set the hostname of the server.
-    node01.vm.hostname = "node01.example.com"
+      # Set the Vagrant box.
+      puppet_node.vm.box = "centos/7"
 
-    # Set the memory of the server.
-    node01.vm.provider "virtualbox" do |vb| 
-      vb.memory = "512"
-    end
+      # Set the hostname of the server.
+      puppet_node.vm.hostname = "n%02d.client.example.com" % i
 
-    # Create a private network, which allows host-only access to the machine
-    # using a specific IP.
-    node01.vm.network "private_network", ip: "#{SUBNET_PRIVATE_NETWORK}.20"
+      # Set the memory of the server.
+      puppet_node.vm.provider "virtualbox" do |vb| 
+        vb.memory = "512"
+      end
 
-    # Provision server.
-    node01.vm.provision "shell", inline: $puppetagent_install
+      # Create a private network, which allows host-only access to the machine
+      # using a specific IP.
+      puppet_node.vm.network "private_network", ip: "#{SUBNET_PRIVATE_NETWORK}.2#{i}"
 
-    node01.vm.provision "puppet" do |puppet|
-      puppet.binary_path = "/opt/puppetlabs/bin"
-      puppet.environment = "agent" 
-      puppet.environment_path = 'bootstrap'
-      puppet.synced_folder_type = "rsync"
-      puppet.options = "--verbose --debug"
+      # Provision server.
+      puppet_node.vm.provision "shell", inline: $puppetagent_install
+
+      puppet_node.vm.provision "puppet" do |puppet|
+        puppet.binary_path = "/opt/puppetlabs/bin"
+        puppet.environment = "agent" 
+        puppet.environment_path = 'bootstrap'
+        puppet.synced_folder_type = "rsync"
+        puppet.options = "--verbose --debug"
+      end
+
     end
 
   end
