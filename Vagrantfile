@@ -31,7 +31,7 @@ Vagrant.configure(2) do |config|
     mom.vm.box = "centos/7"
 
     # Set the hostname of the server.
-    mom.vm.hostname = "mom.master.example.net"
+    mom.vm.hostname = "mom.master.example.com"
 
     # Set the memory of the server.
     mom.vm.provider "virtualbox" do |vb| 
@@ -65,7 +65,7 @@ Vagrant.configure(2) do |config|
       puppet_server.vm.box = "centos/7"
   
       # Set the hostname of the server.
-      puppet_server.vm.hostname = "puppet%02d.example.net" % i
+      puppet_server.vm.hostname = "puppet%02d.example.com" % i
   
       # Set the memory of the server.
       puppet_server.vm.provider "virtualbox" do |vb| 
@@ -99,7 +99,7 @@ Vagrant.configure(2) do |config|
     node01.vm.box = "centos/7"
 
     # Set the hostname of the server.
-    node01.vm.hostname = "node01.example.net"
+    node01.vm.hostname = "node01.example.com"
 
     # Set the memory of the server.
     node01.vm.provider "virtualbox" do |vb| 
