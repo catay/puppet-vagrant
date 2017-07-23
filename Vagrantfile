@@ -59,27 +59,27 @@ Vagrant.configure(2) do |config|
  
   (1..MAX_PUPPET_COMPILE_SERVERS).each do |i|
 
-    config.vm.define "puppet%02d" % [i] do |puppet_server|
+    config.vm.define "c%02d" % [i] do |compile_server|
 
       # Set the Vagrant box.
-      puppet_server.vm.box = "centos/7"
+      compile_server.vm.box = "centos/7"
   
       # Set the hostname of the server.
-      puppet_server.vm.hostname = "puppet%02d.example.com" % i
+      compile_server.vm.hostname = "c%02d.example.com" % i
   
       # Set the memory of the server.
-      puppet_server.vm.provider "virtualbox" do |vb| 
+      compile_server.vm.provider "virtualbox" do |vb| 
         vb.memory = "1024"
       end
   
       # Create a private network, which allows host-only access to the machine
       # using a specific IP.
-      puppet_server.vm.network "private_network", ip: "#{SUBNET_PRIVATE_NETWORK}.1#{i}"
+      compile_server.vm.network "private_network", ip: "#{SUBNET_PRIVATE_NETWORK}.1#{i}"
   
       # Provision server.
-      puppet_server.vm.provision "shell", inline: $puppetserver_install
+      compile_server.vm.provision "shell", inline: $puppetserver_install
   
-      puppet_server.vm.provision "puppet" do |puppet|
+      compile_server.vm.provision "puppet" do |puppet|
         puppet.binary_path = "/opt/puppetlabs/bin"
         puppet.environment = "server" 
         puppet.environment_path = 'bootstrap'
