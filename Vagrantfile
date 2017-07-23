@@ -40,7 +40,7 @@ Vagrant.configure(2) do |config|
 
     # Create a private network, which allows host-only access to the machine
     # using a specific IP.
-    mom.vm.network "private_network", ip: "192.168.99.5"
+    mom.vm.network "private_network", ip: "#{SUBNET_PRIVATE_NETWORK}.5"
 
     # Provision server.
     mom.vm.provision "shell", inline: $puppetserver_install
@@ -74,7 +74,7 @@ Vagrant.configure(2) do |config|
   
       # Create a private network, which allows host-only access to the machine
       # using a specific IP.
-      puppet_server.vm.network "private_network", ip: "192.168.99.1#{i}"
+      puppet_server.vm.network "private_network", ip: "#{SUBNET_PRIVATE_NETWORK}.1#{i}"
   
       # Provision server.
       puppet_server.vm.provision "shell", inline: $puppetserver_install
@@ -108,7 +108,7 @@ Vagrant.configure(2) do |config|
 
     # Create a private network, which allows host-only access to the machine
     # using a specific IP.
-    node01.vm.network "private_network", ip: "192.168.99.20"
+    node01.vm.network "private_network", ip: "#{SUBNET_PRIVATE_NETWORK}.20"
 
     # Provision server.
     node01.vm.provision "shell", inline: $puppetagent_install
