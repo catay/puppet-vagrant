@@ -23,6 +23,38 @@ SCRIPT
 
 Vagrant.configure(2) do |config|
 
+  # Define the master of masters (MoM)
+
+  config.vm.define "mom" do |mom|
+
+    # Set the Vagrant box.
+    mom.vm.box = "centos/7"
+
+    # Set the hostname of the server.
+    mom.vm.hostname = "mom.master.example.net"
+
+    # Set the memory of the server.
+    mom.vm.provider "virtualbox" do |vb| 
+      vb.memory = "1024"
+    end
+
+    # Create a private network, which allows host-only access to the machine
+    # using a specific IP.
+    mom.vm.network "private_network", ip: "192.168.99.5"
+
+    # Provision server.
+    mom.vm.provision "shell", inline: $puppetserver_install
+
+    mom.vm.provision "puppet" do |puppet|
+      puppet.binary_path = "/opt/puppetlabs/bin"
+      puppet.environment = "server" 
+      puppet.environment_path = 'bootstrap'
+      puppet.synced_folder_type = "rsync"
+      puppet.options = "--verbose --debug"
+    end
+
+  end
+
   # Define Puppet compile servers
  
   (1..MAX_PUPPET_COMPILE_SERVERS).each do |i|
