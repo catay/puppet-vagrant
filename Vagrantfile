@@ -4,7 +4,7 @@
 ## Globals ##
 
 SUBNET_PRIVATE_NETWORK="192.168.99"
-MAX_PUPPET_SERVERS=2
+MAX_PUPPET_COMPILE_SERVERS=2
 MAX_PUPPET_NODES=1
 
 ## Inline Shell scripts ##
@@ -23,9 +23,9 @@ SCRIPT
 
 Vagrant.configure(2) do |config|
 
-  # Define Puppet servers
+  # Define Puppet compile servers
  
-  (1..MAX_PUPPET_SERVERS).each do |i|
+  (1..MAX_PUPPET_COMPILE_SERVERS).each do |i|
 
     config.vm.define "puppet%02d" % [i] do |puppet_server|
 
