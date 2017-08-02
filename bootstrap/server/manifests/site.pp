@@ -1,6 +1,5 @@
 
 # Set loopback, FQDN and short host name in hosts file.
-# For a Puppet Server we also set 'puppet' as a host alias.
 
 host {"localhost": 
   ensure        => present,
@@ -14,10 +13,35 @@ host {"localhost6":
   ip            => '::1'
 }
 
-host {$facts['networking']['fqdn']: 
-  ensure        => present,
-  host_aliases  => ["${facts['networking']['hostname']}", "puppet" ],
-  ip            => $facts['networking']['interfaces']['eth1']['ip']
+
+# Set static host entries for the master of masters.
+
+if $trusted['certname'] =~ /^mom.example.com/ {
+
+  host {$facts['networking']['fqdn']: 
+    ensure        => present,
+    host_aliases  => ["${facts['networking']['hostname']}", "puppet" ],
+    ip            => $facts['networking']['interfaces']['eth1']['ip']
+  }
+
+}
+
+# Sset static host entries for the compile masters.
+
+if $trusted['certname'] =~ /^c\d\d.example.com/ {
+
+  host {$facts['networking']['fqdn']: 
+    ensure        => present,
+    host_aliases  => ["${facts['networking']['hostname']}"],
+    ip            => $facts['networking']['interfaces']['eth1']['ip']
+  }
+
+  host {"mom.example.com": 
+    ensure        => present,
+    host_aliases  => ["mom", "puppet" ],
+    ip            => "192.168.99.5"  
+  }
+
 }
 
 # Downsize the JVM memory requirements for the puppet server.
