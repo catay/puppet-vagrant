@@ -44,6 +44,8 @@ $facts['vagrant']['compile_masters'].each |Integer $i, String $cm| {
 
   if $r == $i {
     $cm_aliases = [regsubst($cm,'^(.+)\.example.com','\1'), "puppet"]
+  } else {
+    $cm_aliases = [regsubst($cm,'^(.+)\.example.com','\1')]
   }
 
   # declare compile master host resource
