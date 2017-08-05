@@ -10,12 +10,12 @@ MAX_PUPPET_NODES=1
 ## Inline Shell scripts ##
 
 $puppetserver_install = <<SCRIPT
-yum -y localinstall https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+yum -y localinstall https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
 yum -y install puppetserver
 SCRIPT
 
 $puppetagent_install = <<SCRIPT
-yum -y localinstall https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+yum -y localinstall https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
 yum -y install puppet-agent
 SCRIPT
 
