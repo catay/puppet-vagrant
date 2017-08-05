@@ -87,6 +87,7 @@ Vagrant.configure(2) do |config|
   
       # Provision server.
       compile_server.vm.provision "shell", inline: $puppetserver_install
+      compile_server.vm.provision "shell", inline: $puppet_custom_facts
   
       compile_server.vm.provision "puppet" do |puppet|
         puppet.binary_path = "/opt/puppetlabs/bin"
