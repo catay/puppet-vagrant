@@ -26,7 +26,7 @@ if $trusted['certname'] =~ /^mom.example.com/ {
 
 }
 
-# Sset static host entries for the compile masters.
+# Set static host entries for the compile masters.
 
 if $trusted['certname'] =~ /^c\d\d.example.com/ {
 
@@ -39,7 +39,7 @@ if $trusted['certname'] =~ /^c\d\d.example.com/ {
   host {"mom.example.com": 
     ensure        => present,
     host_aliases  => ["mom", "puppet" ],
-    ip            => "192.168.99.5"  
+    ip            => "${facts['vagrant']['subnet']}.5"  
   }
 
 }
