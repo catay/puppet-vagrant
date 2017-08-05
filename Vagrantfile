@@ -19,6 +19,14 @@ yum -y localinstall https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarc
 yum -y install puppet-agent
 SCRIPT
 
+$puppet_custom_facts = <<SCRIPT
+mkdir -p /etc/puppetlabs/facter/facts.d
+echo "vagrant:" > /etc/puppetlabs/facter/facts.d/vagrant.yaml
+echo "  subnet: #{SUBNET_PRIVATE_NETWORK}" >> /etc/puppetlabs/facter/facts.d/vagrant.yaml
+echo "  compile_masters:" >> /etc/puppetlabs/facter/facts.d/vagrant.yaml
+seq -f "%02.f" #{MAX_PUPPET_COMPILE_SERVERS} | awk '{print "   - c"$0".example.com"}' >> /etc/puppetlabs/facter/facts.d/vagrant.yaml 
+SCRIPT
+
 ## Vagrant definitions ##
 
 Vagrant.configure(2) do |config|
@@ -114,6 +122,7 @@ Vagrant.configure(2) do |config|
 
       # Provision server.
       puppet_node.vm.provision "shell", inline: $puppetagent_install
+      puppet_node.vm.provision "shell", inline: $puppet_custom_facts
 
       puppet_node.vm.provision "puppet" do |puppet|
         puppet.binary_path = "/opt/puppetlabs/bin"
