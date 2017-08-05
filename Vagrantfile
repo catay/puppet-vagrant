@@ -23,6 +23,7 @@ $puppet_custom_facts = <<SCRIPT
 mkdir -p /etc/puppetlabs/facter/facts.d
 echo "vagrant:" > /etc/puppetlabs/facter/facts.d/vagrant.yaml
 echo "  subnet: #{SUBNET_PRIVATE_NETWORK}" >> /etc/puppetlabs/facter/facts.d/vagrant.yaml
+echo "  compile_masters_count: #{MAX_PUPPET_COMPILE_SERVERS}" >> /etc/puppetlabs/facter/facts.d/vagrant.yaml
 echo "  compile_masters:" >> /etc/puppetlabs/facter/facts.d/vagrant.yaml
 seq -f "%02.f" #{MAX_PUPPET_COMPILE_SERVERS} | awk '{print "   - c"$0".example.com"}' >> /etc/puppetlabs/facter/facts.d/vagrant.yaml 
 SCRIPT
