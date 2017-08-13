@@ -29,9 +29,9 @@ $ vagrant up
 A set of global variables in the the Vagrantfile can be configured to
 change the configuration.
 
-|variable                  | function                                        |
-|--------------------------|-------------------------------------------------|
-|DEBUG_PROVISIONING        | Enable/disable provisioning debug output.       |
-|SUBNET_PRIVATE_NETWORK    | Configure different subnet prefix.              |
-|MAX_PUPPET_COMPILE_SERVERS| Configure the amount of compile Puppet servers. |
-|MAX_PUPPET_NODES          | Configure the amount of regular Puppet nodes.   |
+|variable                  | function                                                     |
+|--------------------------|--------------------------------------------------------------|
+|DEBUG_PROVISIONING        | Enable/disable provisioning debug output. (default: false)   |
+|SUBNET_PRIVATE_NETWORK    | Configure different subnet prefix. (default: 192.168.99)     |
+|MAX_PUPPET_COMPILE_SERVERS| Configure the amount of compile Puppet servers. (default: 2) |
+|MAX_PUPPET_NODES          | Configure the amount of regular Puppet nodes. (default: 1)   |
