@@ -3,20 +3,32 @@
 
 ## Globals ##
 
+DEBUG_PROVISIONING=false
 SUBNET_PRIVATE_NETWORK="192.168.99"
 MAX_PUPPET_COMPILE_SERVERS=2
 MAX_PUPPET_NODES=1
 
+# If debug is enabled, give more verbose output when installing
+# packages and during puppet apply.
+
+if DEBUG_PROVISIONING
+  YUM_OPTIONS="-y"
+  PUPPET_OPTIONS="--verbose --debug"
+else
+  YUM_OPTIONS="-y -q"
+  PUPPET_OPTIONS=""
+end
+
 ## Inline Shell scripts ##
 
 $puppetserver_install = <<SCRIPT
-yum -y localinstall https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
-yum -y install puppetserver
+yum #{YUM_OPTIONS} localinstall https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
+yum #{YUM_OPTIONS} install puppetserver
 SCRIPT
 
 $puppetagent_install = <<SCRIPT
-yum -y localinstall https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
-yum -y install puppet-agent
+yum #{YUM_OPTIONS} localinstall https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
+yum #{YUM_OPTIONS} install puppet-agent
 SCRIPT
 
 $puppet_custom_facts = <<SCRIPT
@@ -59,7 +71,7 @@ Vagrant.configure(2) do |config|
       puppet.environment = "server" 
       puppet.environment_path = 'bootstrap'
       puppet.synced_folder_type = "rsync"
-      puppet.options = "--verbose --debug"
+      puppet.options = "#{PUPPET_OPTIONS}"
     end
 
   end
@@ -94,7 +106,7 @@ Vagrant.configure(2) do |config|
         puppet.environment = "server" 
         puppet.environment_path = 'bootstrap'
         puppet.synced_folder_type = "rsync"
-        puppet.options = "--verbose --debug"
+        puppet.options = "#{PUPPET_OPTIONS}"
       end
 
     end
@@ -131,7 +143,7 @@ Vagrant.configure(2) do |config|
         puppet.environment = "agent" 
         puppet.environment_path = 'bootstrap'
         puppet.synced_folder_type = "rsync"
-        puppet.options = "--verbose --debug"
+        puppet.options = "#{PUPPET_OPTIONS}"
       end
 
     end
